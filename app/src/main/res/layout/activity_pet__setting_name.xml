@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.im.mylovepet.Pet_SettingName">
+
+    <ImageView
+        android:id="@+id/Pet_Add"
+        android:src="@mipmap/back_gray"
+        app:layout_heightPercent="9%"
+        app:layout_marginPercent="3%"
+        app:layout_widthPercent="6%" />
+
+    <TextView
+        android:id="@+id/pet_Setting_title"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="名称"
+        android:textSize="30sp"
+        app:layout_heightPercent="12%"
+        app:layout_marginTopPercent="3%"
+        app:layout_widthPercent="23%" />
+
+    <TextView
+        android:id="@+id/Pet_SettingName_save"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="提交"
+        app:layout_heightPercent="12%"
+        app:layout_marginTopPercent="3%"
+        app:layout_widthPercent="23%" />
+
+    <EditText
+        android:id="@+id/Pet_SettingName"
+        android:layout_below="@+id/pet_Setting_title"
+        android:background="@drawable/myshape"
+        app:layout_heightPercent="12%"
+        app:layout_marginPercent="3%"
+        app:layout_widthPercent="100%" />
+</android.support.percent.PercentRelativeLayout>

@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'org.greenrobot.greendao'
 android {
     compileSdkVersion 26
     buildToolsVersion "27.0.3"
@@ -17,6 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    greendao {
+        schemaVersion 1 //指定数据库schema版本号，迁移等操作会用到
+        //包名是活的这是变动的
+        daoPackage 'com.example.im.mylovepet.dao' //dao的包名，包名默认是entity所在的包；
+        targetGenDir 'src/main/java'//生成数据库文件的目录
+    }
 }
 
 dependencies {
@@ -24,7 +31,20 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
+    compile 'com.android.support:design:26.0.0-alpha1'
+    compile 'com.github.bumptech.glide:glide:4.0.0'
+    compile 'com.youth.banner:banner:1.4.9'
+    compile 'org.greenrobot:greendao:3.2.0'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.orhanobut:logger:1.15'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+    compile 'com.android.support:percent:25.0.0'
     testCompile 'junit:junit:4.12'
 }

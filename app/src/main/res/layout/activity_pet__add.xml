@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/popup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f1eded"
+    tools:context="com.example.im.mylovepet.Pet_AddActivity">
+
+    <ImageView
+        android:src="@mipmap/back_gray"
+        android:id="@+id/Pet_Add"
+        app:layout_heightPercent="9%"
+        app:layout_marginPercent="3%"
+        app:layout_widthPercent="6%" />
+
+    <TextView
+        android:id="@+id/pet_add_title"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="添加宠物"
+
+        app:layout_heightPercent="12%"
+        app:layout_marginTopPercent="3%"
+        app:layout_widthPercent="23%" />
+
+    <TextView
+        android:id="@+id/pet_add_save"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="保存"
+        app:layout_heightPercent="12%"
+        app:layout_marginTopPercent="3%"
+        app:layout_widthPercent="23%" />
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/Pet_Title_image"
+        android:layout_below="@+id/pet_add_save"
+        android:background="#fff"
+        app:layout_heightPercent="12%"
+        app:layout_marginTopPercent="0.5%"
+        app:layout_widthPercent="100%">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="头像"
+            app:layout_heightPercent="50%"
+            app:layout_marginPercent="3%"
+            app:layout_widthPercent="10%" />
+
+        <ImageView
+            android:id="@+id/a"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/enter"
+            app:layout_heightPercent="30%"
+            app:layout_widthPercent="20%" />
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/a"
+            android:src="@mipmap/pet_head"
+            app:layout_heightPercent="90%"
+            app:layout_widthPercent="10%" />
+    </android.support.percent.PercentRelativeLayout>
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/Pet_name"
+        android:layout_below="@+id/Pet_Title_image"
+        android:background="#fff"
+        app:layout_heightPercent="9%"
+        app:layout_marginTopPercent="0.5%"
+        app:layout_widthPercent="100%">
+
+        <TextView
+            android:text="昵称"
+            app:layout_heightPercent="35.7%"
+            app:layout_marginLeftPercent="4.3%"
+            app:layout_widthPercent="10%" />
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/enter"
+            app:layout_heightPercent="50%"
+            app:layout_marginPercent="5%"
+            app:layout_widthPercent="10%" />
+    </android.support.percent.PercentRelativeLayout>
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/Pet_Type"
+        android:layout_below="@+id/Pet_name"
+        android:background="#fff"
+        app:layout_heightPercent="8%"
+        app:layout_marginTopPercent="0.5%"
+        app:layout_widthPercent="100%">
+
+        <TextView
+            android:text="宠物类型"
+            app:layout_heightPercent="50%"
+            app:layout_marginLeftPercent="4.3%"
+            app:layout_widthPercent="30%" />
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/enter"
+            app:layout_heightPercent="50%"
+            app:layout_marginPercent="5%"
+            app:layout_widthPercent="10%" />
+    </android.support.percent.PercentRelativeLayout>
+
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/Pet_Sterilize"
+        android:layout_below="@+id/Pet_Type"
+        android:background="#fff"
+        app:layout_heightPercent="8%"
+        app:layout_marginTopPercent="0.5%"
+        app:layout_widthPercent="100%">
+
+        <TextView
+            android:text="是否绝育"
+            app:layout_heightPercent="50%"
+            app:layout_marginLeftPercent="4.3%"
+            app:layout_widthPercent="30%" />
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/enter"
+            app:layout_heightPercent="50%"
+            app:layout_marginPercent="5%"
+            app:layout_widthPercent="10%" />
+    </android.support.percent.PercentRelativeLayout>
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/Pet_Date"
+        android:layout_below="@+id/Pet_Sterilize"
+        android:background="#fff"
+        app:layout_heightPercent="8%"
+        app:layout_marginTopPercent="0.5%"
+        app:layout_widthPercent="100%">
+
+        <TextView
+            android:text="出生日期"
+            app:layout_heightPercent="50%"
+            app:layout_marginLeftPercent="4.3%"
+            app:layout_widthPercent="30%" />
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/enter"
+            app:layout_heightPercent="50%"
+            app:layout_marginPercent="5%"
+            app:layout_widthPercent="10%" />
+    </android.support.percent.PercentRelativeLayout>
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/Pet_Kg"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/Pet_Date"
+        android:background="#fff"
+        app:layout_heightPercent="8%"
+        app:layout_marginTopPercent="0.5%"
+        app:layout_widthPercent="100%">
+
+        <TextView
+            android:text="体重"
+            app:layout_heightPercent="50%"
+            app:layout_marginLeftPercent="4.3%"
+            app:layout_widthPercent="30%" />
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/enter"
+            app:layout_heightPercent="50%"
+            app:layout_marginPercent="5%"
+            app:layout_widthPercent="10%" />
+    </android.support.percent.PercentRelativeLayout>
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/Pet_Immune"
+        android:layout_below="@+id/Pet_Kg"
+        android:background="#fff"
+        app:layout_heightPercent="8%"
+        app:layout_marginTopPercent="0.5%"
+        app:layout_widthPercent="100%">
+
+        <TextView
+            android:text="免疫情况"
+            app:layout_heightPercent="50%"
+            app:layout_marginLeftPercent="4.3%"
+            app:layout_widthPercent="30%" />
+
+        <ImageView
+            android:id="@+id/myimg"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/enter"
+            app:layout_heightPercent="50%"
+            app:layout_marginPercent="5%"
+            app:layout_widthPercent="10%" />
+
+        <TextView
+            android:layout_toLeftOf="@+id/myimg"
+            android:text="未完善信息"
+            app:layout_heightPercent="50%"
+            app:layout_marginLeftPercent="4.3%"
+            app:layout_widthPercent="19%" />
+    </android.support.percent.PercentRelativeLayout>
+
+
+    <TextView
+        android:id="@+id/petjj"
+        android:layout_below="@+id/Pet_Immune"
+        android:text="添加宠物"
+
+        app:layout_heightPercent="5%"
+        app:layout_marginLeftPercent="5%"
+        app:layout_widthPercent="18%" />
+
+    <EditText
+        android:id="@+id/Pet_JJ"
+        android:layout_below="@+id/petjj"
+        android:background="@drawable/popup_shape"
+        app:layout_heightPercent="18%"
+        app:layout_marginLeftPercent="5%"
+        app:layout_widthPercent="90%" />
+
+
+</android.support.percent.PercentRelativeLayout>

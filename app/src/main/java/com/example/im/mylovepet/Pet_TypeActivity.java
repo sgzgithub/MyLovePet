@@ -9,5 +9,7 @@ public class Pet_TypeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet__type);
+
+
     }
 }

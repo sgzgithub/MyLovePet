@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="RideoStyle" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@null</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:drawableRight">@drawable/immune_image</item>
+
+    </style>
 </resources>

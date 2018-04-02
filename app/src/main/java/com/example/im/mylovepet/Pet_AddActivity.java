@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -112,8 +113,9 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onTimeSelect(Date date2, View v) {//选中事件回调
-//                        String time = getTime(date2);
-//                        button3.setText(time);
+                        String time = getTime(date2);
+                        myDbBean.setShengri(time);
+                        beanDao.insert(myDbBean);
 
                     }
                 })
@@ -148,9 +150,9 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
 
                 break;
             case R.id.Pet_Immune:
-
+                Intent intent4 = new Intent(Pet_AddActivity.this, ImmuneActivity.class);
+                startActivity(intent4);
                 break;
-
             case R.id.Pet_Add:
                 finish();
                 break;
@@ -300,9 +302,8 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
         startActivityForResult(intent, PHOTO_CLIP);
     }
 
-//
-//    public String getTime(Date date) {//可根据需要自行截取数据显示
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
-//        return format.format(date);
-//    }
+    public String getTime(Date date) {//可根据需要自行截取数据显示
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
 }

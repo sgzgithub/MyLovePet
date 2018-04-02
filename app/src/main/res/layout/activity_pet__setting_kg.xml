@@ -14,7 +14,7 @@
         app:layout_widthPercent="6%" />
 
     <TextView
-        android:id="@+id/pet_Setting_title"
+        android:id="@+id/pet_SettingKg_title"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="体重"
@@ -34,7 +34,7 @@
 
     <EditText
         android:id="@+id/Pet_SettingKg"
-        android:layout_below="@+id/pet_Setting_title"
+        android:layout_below="@+id/pet_SettingKg_title"
         android:background="@drawable/myshape"
         app:layout_heightPercent="12%"
         app:layout_marginPercent="3%"

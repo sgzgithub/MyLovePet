@@ -46,6 +46,8 @@ dependencies {
     compile 'com.orhanobut:logger:1.15'
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     compile 'com.android.support:percent:25.0.0'
+    compile 'com.contrarywind:Android-PickerView:3.2.4'
     compile 'com.android.support:support-v4:26.+'
     testCompile 'junit:junit:4.12'
+
 }

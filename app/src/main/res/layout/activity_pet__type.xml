@@ -1,9 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.im.mylovepet.Pet_TypeActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <ImageView
+        android:id="@+id/Pet_Type_exit"
+        android:src="@mipmap/back_gray"
+        app:layout_heightPercent="12%"
+        app:layout_marginLeftPercent="3%"
+        app:layout_widthPercent="6%" />
+
+    <TextView
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="宠物类型"
+        app:layout_heightPercent="12%"
+        app:layout_widthPercent="23%" />
+
+    <EditText
+        android:id="@+id/Pet_Type_look"
+        android:layout_below="@+id/Pet_Type_exit"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/myshape"
+        app:layout_heightPercent="10%"
+        app:layout_widthPercent="90%" />
+
+    <RadioGroup
+        android:id="@+id/pet_Type_Rg"
+        android:layout_below="@+id/Pet_Type_look"
+        android:orientation="horizontal"
+        app:layout_heightPercent="10%"
+        app:layout_widthPercent="100%">
+
+        <RadioButton
+            android:id="@+id/Pet_Type_Rb_Dog"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="狗"
+            android:textSize="20dp" />
+
+        <RadioButton
+            android:id="@+id/Pet_Type_Rb_Cat"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="猫"
+            android:textSize="20dp" />
+
+        <RadioButton
+            android:id="@+id/Pet_Type_Rb_Rests"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="小宠"
+            android:textSize="20dp" />
+    </RadioGroup>
+
+    <FrameLayout
+        android:id="@+id/Pet_Tyoe_Frame"
+        android:layout_below="@+id/pet_Type_Rg"
+        app:layout_heightPercent="100%"
+        app:layout_widthPercent="100%" />
+
+</android.support.percent.PercentRelativeLayout>

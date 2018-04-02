@@ -32,7 +32,8 @@
         </provider>
 
         <activity android:name=".Pet_SettingName" />
-        <activity android:name=".Pet_TypeActivity"></activity>
+        <activity android:name=".Pet_TypeActivity" />
+        <activity android:name=".Pet_SettingKg"></activity>
     </application>
 
 </manifest>

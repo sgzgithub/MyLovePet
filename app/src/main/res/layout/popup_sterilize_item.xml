@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/a"
+        android:background="@mipmap/bomb_box_bg_03_d"
+        android:gravity="center"
+        android:text="是否绝育"
+        app:layout_heightPercent="10%"
+        app:layout_widthPercent="70%" />
+
+    <Button
+        android:id="@+id/yes"
+        android:layout_below="@+id/a"
+        android:layout_marginTop="1dp"
+        android:background="@mipmap/bomb_box_bg_02_d"
+        android:gravity="center"
+        android:text="是"
+        app:layout_heightPercent="10%"
+        app:layout_widthPercent="70%" />
+
+    <Button
+        android:id="@+id/no"
+        android:layout_below="@+id/yes"
+        android:layout_marginTop="1dp"
+        android:background="@mipmap/bomb_box_bg_03"
+        android:gravity="center"
+        android:text="否"
+        app:layout_heightPercent="10%"
+        app:layout_widthPercent="70%" />
+
+</android.support.percent.PercentRelativeLayout>

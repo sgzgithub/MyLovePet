@@ -23,11 +23,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 
+import com.example.im.mylovepet.dao.MyDbBeanDao;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+import app.MyApplication;
+import bean.MyDbBean;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -61,26 +65,33 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
     private Uri contentUri;
     private Bitmap photo1;
     private File file;
+    private MyDbBeanDao beanDao;
+    private MyDbBean myDbBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet__add);
+        beanDao = MyApplication.getApplication().getDaoSession().getMyDbBeanDao();
+        initDbBean();
         ButterKnife.bind(this);
 
+    }
+
+    private void initDbBean() {
+        myDbBean = new MyDbBean();
     }
 
     @OnClick({R.id.Pet_Add, R.id.Pet_Title_image, R.id.Pet_name, R.id.Pet_Type, R.id.Pet_Sterilize, R.id.Pet_Date, R.id.Pet_Kg, R.id.Pet_Immune})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.Pet_Title_image:
-                initPopup();
+                initTakePopup();
                 pw.showAtLocation(findViewById(R.id.popup), Gravity.BOTTOM | Gravity.CENTER, 0, 0);
                 break;
             case R.id.Pet_name:
                 Intent intent = new Intent(Pet_AddActivity.this, Pet_SettingName.class);
                 startActivity(intent);
-
                 break;
             case R.id.Pet_Type:
                 Intent intent1 = new Intent(Pet_AddActivity.this, Pet_TypeActivity.class);
@@ -88,15 +99,16 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
 
                 break;
             case R.id.Pet_Sterilize:
-
-
+                initSterilizePopup();
+                pw.showAtLocation(findViewById(R.id.popup), Gravity.BOTTOM | Gravity.CENTER, 0, 0);
                 break;
             case R.id.Pet_Date:
 
 
                 break;
             case R.id.Pet_Kg:
-
+                Intent intent3 = new Intent(Pet_AddActivity.this, Pet_SettingKg.class);
+                startActivity(intent3);
 
                 break;
             case R.id.Pet_Immune:
@@ -122,8 +134,37 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void initPopup() {
-        View view = getLayoutInflater().inflate(R.layout.popup_item, null);
+    private void initSterilizePopup() {
+
+
+        View view = getLayoutInflater().inflate(R.layout.popup_sterilize_item, null);
+//        PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        pw = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        Button yes = view.findViewById(R.id.yes);
+        Button no = view.findViewById(R.id.no);
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myDbBean.setSterilization("是");
+                beanDao.insert(myDbBean);
+                pw.dismiss();
+            }
+        });
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myDbBean.setSterilization("否");
+                beanDao.insert(myDbBean);
+                pw.dismiss();
+            }
+        });
+        pw.setFocusable(true);
+        pw.setBackgroundDrawable(new ColorDrawable());
+        pw.setOutsideTouchable(true);
+    }
+
+    private void initTakePopup() {
+        View view = getLayoutInflater().inflate(R.layout.popup_take_item, null);
         pw = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         Button pz = view.findViewById(R.id.pz);
         Button xc = view.findViewById(R.id.xc);

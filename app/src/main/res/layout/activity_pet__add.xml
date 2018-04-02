@@ -9,8 +9,8 @@
     tools:context="com.example.im.mylovepet.Pet_AddActivity">
 
     <ImageView
-        android:src="@mipmap/back_gray"
         android:id="@+id/Pet_Add"
+        android:src="@mipmap/back_gray"
         app:layout_heightPercent="9%"
         app:layout_marginPercent="3%"
         app:layout_widthPercent="6%" />
@@ -20,7 +20,6 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="添加宠物"
-
         app:layout_heightPercent="12%"
         app:layout_marginTopPercent="3%"
         app:layout_widthPercent="23%" />
@@ -110,7 +109,6 @@
             app:layout_marginPercent="5%"
             app:layout_widthPercent="10%" />
     </android.support.percent.PercentRelativeLayout>
-
 
     <android.support.percent.PercentRelativeLayout
         android:id="@+id/Pet_Sterilize"
@@ -207,7 +205,7 @@
             android:text="未完善信息"
             app:layout_heightPercent="50%"
             app:layout_marginLeftPercent="4.3%"
-            app:layout_widthPercent="19%" />
+            app:layout_widthPercent="23%" />
     </android.support.percent.PercentRelativeLayout>
 
 
@@ -215,7 +213,6 @@
         android:id="@+id/petjj"
         android:layout_below="@+id/Pet_Immune"
         android:text="添加宠物"
-
         app:layout_heightPercent="5%"
         app:layout_marginLeftPercent="5%"
         app:layout_widthPercent="18%" />
@@ -224,7 +221,9 @@
         android:id="@+id/Pet_JJ"
         android:layout_below="@+id/petjj"
         android:background="@drawable/popup_shape"
-        app:layout_heightPercent="18%"
+        android:inputType="textMultiLine"
+        android:minLines="5"
+        app:layout_heightPercent="14%"
         app:layout_marginLeftPercent="5%"
         app:layout_widthPercent="90%" />
 

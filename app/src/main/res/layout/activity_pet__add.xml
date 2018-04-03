@@ -59,6 +59,7 @@
             app:layout_widthPercent="20%" />
 
         <ImageView
+            android:id="@+id/titlt_image"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/a"
             android:src="@mipmap/pet_head"
@@ -212,7 +213,7 @@
     <TextView
         android:id="@+id/petjj"
         android:layout_below="@+id/Pet_Immune"
-        android:text="添加宠物"
+        android:text="宠物简介"
         app:layout_heightPercent="5%"
         app:layout_marginLeftPercent="5%"
         app:layout_widthPercent="18%" />
@@ -221,7 +222,9 @@
         android:id="@+id/Pet_JJ"
         android:layout_below="@+id/petjj"
         android:background="@drawable/popup_shape"
+        android:gravity="top"
         android:inputType="textMultiLine"
+        android:maxLength="100"
         android:minLines="5"
         app:layout_heightPercent="14%"
         app:layout_marginLeftPercent="5%"

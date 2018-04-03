@@ -1,10 +1,7 @@
 package com.example.im.mylovepet;
 
-import android.app.Activity;
-import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -14,9 +11,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.percent.PercentRelativeLayout;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +19,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.Toast;
 
 import com.bigkoo.pickerview.TimePickerView;
+import com.bumptech.glide.Glide;
 import com.example.im.mylovepet.dao.MyDbBeanDao;
+import com.example.im.mylovepet.utils.GlideCircleTransform;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -63,16 +59,20 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
     EditText PetJJ;
     @Bind(R.id.Pet_Add)
     ImageView exit;
+    @Bind(R.id.titlt_image)
+    ImageView image_title;
 
     private PopupWindow pw;
-    private static final int PHOTO_TK = 0;
-    private static final int PHOTO_PZ = 1;
-    private static final int PHOTO_CLIP = 2;
-    private Uri contentUri;
-    private Bitmap photo1;
-    private File file;
+    //    private Uri contentUri;
+//    private Bitmap photo1;
+//    private File file;
     private MyDbBeanDao beanDao;
     private MyDbBean myDbBean;
+    private static final int CODE_PHOTO_REQUEST = 1;
+    private static final int CODE_CAMERA_REQUEST = 2;
+    private static final int CODE_PHOTO_CLIP = 3;
+    private static final File USER_ICON = new File(Environment.getExternalStorageDirectory(), "user_icon.jpg");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +82,87 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
         initDbBean();
         ButterKnife.bind(this);
 
+    }
+
+
+    private void getPicFromLocal() {
+        Intent intent = new Intent();
+        // 获取本地相册方法一
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, CODE_PHOTO_REQUEST);
+    }
+
+
+    private void getPicFromCamera() {
+        Intent intent = new Intent();
+        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        // 下面这句指定调用相机拍照后的照片存储的路径
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(USER_ICON));
+        startActivityForResult(intent, CODE_CAMERA_REQUEST);
+    }
+
+
+    private void photoClip(Uri uri) {
+        // 调用系统中自带的图片剪裁
+        Intent intent = new Intent();
+        intent.setAction("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        // 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
+        intent.putExtra("crop", "true");
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+    /*outputX outputY 是裁剪图片宽高
+     *这里仅仅是头像展示，不建议将值设置过高
+     * 否则超过binder机制的缓存大小的1M限制
+     * 报TransactionTooLargeException
+     */
+        intent.putExtra("outputX", 150);
+        intent.putExtra("outputY", 150);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, CODE_PHOTO_CLIP);
+    }
+
+    private void setImageToHeadView(Intent intent) {
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            Bitmap photo = extras.getParcelable("data");
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+            byte[] bytes = outputStream.toByteArray();
+            Glide.with(Pet_AddActivity.this)
+                    .load(bytes)
+                    .transform(new GlideCircleTransform(Pet_AddActivity.this))
+                    .into(image_title);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // 用户没有进行有效的设置操作，返回
+        if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(Pet_AddActivity.this, "图片太大，请选择小图片", Toast.LENGTH_LONG).show();
+            return;
+        }
+        switch (requestCode) {
+            case CODE_CAMERA_REQUEST:
+                if (USER_ICON.exists()) {
+                    photoClip(Uri.fromFile(USER_ICON));
+                }
+                break;
+            case CODE_PHOTO_REQUEST:
+                if (data != null) {
+                    photoClip(data.getData());
+                }
+                break;
+            case CODE_PHOTO_CLIP:
+                if (data != null) {
+                    setImageToHeadView(data);
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void initDbBean() {
@@ -109,39 +190,7 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
                 pw.showAtLocation(findViewById(R.id.popup), Gravity.BOTTOM | Gravity.CENTER, 0, 0);
                 break;
             case R.id.Pet_Date:
-                TimePickerView pvTime = new TimePickerView.Builder(Pet_AddActivity.this, new TimePickerView.OnTimeSelectListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    @Override
-                    public void onTimeSelect(Date date2, View v) {//选中事件回调
-                        String time = getTime(date2);
-                        myDbBean.setShengri(time);
-                        beanDao.insert(myDbBean);
-
-                    }
-                })
-                        .setType(TimePickerView.Type.YEAR_MONTH_DAY)//默认全部显示
-                        .setCancelText("取消")//取消按钮文字
-                        .setSubmitText("确定")//确认按钮文字
-                        .setContentSize(20)//滚轮文字大小
-                        .setTitleSize(20)//标题文字大小
-//                        .setTitleText("请选择时间")//标题文字
-                        .setOutSideCancelable(true)//点击屏幕，点在控件外部范围时，是否取消显示
-                        .isCyclic(true)//是否循环滚动
-                        .setTextColorCenter(Color.BLACK)//设置选中项的颜色
-                        .setTitleColor(Color.BLACK)//标题文字颜色
-                        .setSubmitColor(Color.BLUE)//确定按钮文字颜色
-                        .setCancelColor(Color.BLUE)//取消按钮文字颜色
-//                        .setTitleBgColor(0xFF666666)//标题背景颜色 Night mode
-//                        .setBgColor(0xFF333333)//滚轮背景颜色 Night mode
-//                        .setRange(calendar.get(Calendar.YEAR) - 20, calendar.get(Calendar.YEAR) + 20)//默认是1900-2100年
-//                        .setDate(selectedDate)// 如果不设置的话，默认是系统时间*/
-//                        .setRangDate(startDate,endDate)//起始终止年月日设定
-//                        .setLabel("年","月","日","时","分","秒")
-                        .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-//                        .isDialog(true)//是否显示为对话框样式
-                        .build();
-                pvTime.setDate(Calendar.getInstance());//注：根据需求来决定是否使用该方法（一般是精确到秒的情况），此项可以在弹出选择器的时候重新设置当前时间，避免在初始化之后由于时间已经设定，导致选中时间与当前时间不匹配的问题。
-                pvTime.show();
+                initDate();
 
                 break;
             case R.id.Pet_Kg:
@@ -157,26 +206,44 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
             case pz:
-                Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                Uri mImageCaptureUri;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    intent2.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    contentUri = FileProvider.getUriForFile(Pet_AddActivity.this, "com.example.im.mylovepet", new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
-                    intent2.putExtra(MediaStore.EXTRA_OUTPUT, contentUri);
-                } else {
-                    mImageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "temp.jpg"));
-                    intent2.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-                }
-                startActivityForResult(intent2, PHOTO_PZ);
+                getPicFromCamera();
+                pw.dismiss();
                 break;
         }
+    }
+
+    private void initDate() {
+        TimePickerView pvTime = new TimePickerView.Builder(Pet_AddActivity.this, new TimePickerView.OnTimeSelectListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onTimeSelect(Date date2, View v) {//选中事件回调
+                String time = getTime(date2);
+                myDbBean.setShengri(time);
+                beanDao.insert(myDbBean);
+
+            }
+        })
+                .setType(TimePickerView.Type.YEAR_MONTH_DAY)//默认全部显示
+                .setCancelText("取消")//取消按钮文字
+                .setSubmitText("确定")//确认按钮文字
+                .setContentSize(20)//滚轮文字大小
+                .setTitleSize(20)//标题文字大小
+                .setOutSideCancelable(true)//点击屏幕，点在控件外部范围时，是否取消显示
+                .isCyclic(true)//是否循环滚动
+                .setTextColorCenter(Color.BLACK)//设置选中项的颜色
+                .setTitleColor(Color.BLACK)//标题文字颜色
+                .setSubmitColor(Color.BLUE)//确定按钮文字颜色
+                .setCancelColor(Color.BLUE)//取消按钮文字颜色
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .build();
+        pvTime.setDate(Calendar.getInstance());//注：根据需求来决定是否使用该方法（一般是精确到秒的情况），此项可以在弹出选择器的时候重新设置当前时间，避免在初始化之后由于时间已经设定，导致选中时间与当前时间不匹配的问题。
+        pvTime.show();
     }
 
     private void initSterilizePopup() {
 
 
         View view = getLayoutInflater().inflate(R.layout.popup_sterilize_item, null);
-//        PopupWindow popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         pw = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         Button yes = view.findViewById(R.id.yes);
         Button no = view.findViewById(R.id.no);
@@ -211,9 +278,8 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
         xc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK, null);
-                intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "image/*");
-                startActivityForResult(intent, PHOTO_TK);
+                getPicFromLocal();
+                pw.dismiss();
             }
         });
         qx.setOnClickListener(new View.OnClickListener() {
@@ -226,80 +292,6 @@ public class Pet_AddActivity extends AppCompatActivity implements View.OnClickLi
         pw.setBackgroundDrawable(new ColorDrawable());
         pw.setOutsideTouchable(true);
         pz.setOnClickListener(this);
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case PHOTO_PZ:
-                    Uri pictur;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        pictur = contentUri;
-                    } else {
-                        pictur = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/temp.jpg"));
-                    }
-
-                    startPhotoZoom(pictur);
-                    break;
-                case PHOTO_TK:
-                    startPhotoZoom(data.getData());
-
-                    break;
-
-                case PHOTO_CLIP:
-                    try {
-                        photo1 = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    String path = Environment.getExternalStorageDirectory()
-                            .getPath() + "/Pic";
-                    file = new File(path);
-                    Log.e("file", file.getPath());
-                    file.mkdirs();
-                    long i = System.currentTimeMillis();
-                    file = new File(file.toString() + "/" + i + ".png");
-                    Log.e("fileNew", file.getPath());
-                    OutputStream out = null;
-                    try {
-                        out = new FileOutputStream(file.getPath());
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    boolean flag = photo1.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                    if (file.getName() != null || !file.getName().equals(""))
-                        break;
-            }
-        }
-    }
-
-
-    private Uri uritempFile;
-
-    public void startPhotoZoom(Uri uri) {
-        Log.e("uri====", "" + uri);
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri, "image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("aspectX", 60);
-        intent.putExtra("aspectY", 60);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.setClipData(ClipData.newRawUri(MediaStore.EXTRA_OUTPUT, uri));
-            uritempFile = uri;
-        } else {
-            uritempFile = Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
-        }
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uritempFile);
-        intent.putExtra("return-data", false);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        intent.putExtra("noFaceDetection", true);
-        startActivityForResult(intent, PHOTO_CLIP);
     }
 
     public String getTime(Date date) {//可根据需要自行截取数据显示
